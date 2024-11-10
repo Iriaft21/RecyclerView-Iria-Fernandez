@@ -12,11 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class ContactoAdapter extends RecyclerView.Adapter<ContactoAdapter.ContactoViewHolder> {
-    
-    ArrayList<Contacto> coleccion;
 
-    public ContactoAdapter(ArrayList<Contacto> coleccion) {
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+    }
+    
+    private ArrayList<Contacto> coleccion;
+    private OnItemClickListener itemClickListener;
+
+    public ContactoAdapter(ArrayList<Contacto> coleccion, OnItemClickListener itemClickListener) {
         this.coleccion = coleccion;
+        this.itemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -43,7 +49,9 @@ public class ContactoAdapter extends RecyclerView.Adapter<ContactoAdapter.Contac
         return coleccion.size();
     }
 
-    public class ContactoViewHolder extends RecyclerView.ViewHolder{
+
+
+    public class ContactoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         TextView tv_nombreCompleto;
         TextView tv_email;
@@ -51,10 +59,19 @@ public class ContactoAdapter extends RecyclerView.Adapter<ContactoAdapter.Contac
 
         public ContactoViewHolder(@NonNull View itemView) {
             super(itemView);
+            //para propagar el evento del click a nuestra actividad
+            itemView.setOnClickListener(this);
+
             imageView = itemView.findViewById(R.id.foto);
             tv_nombreCompleto = itemView.findViewById(R.id.nombreCompleto);
             tv_email = itemView.findViewById(R.id.email);
             tv_telefono = itemView.findViewById(R.id.telefono);
+        }
+
+
+        @Override
+        public void onClick(View view) {
+            itemClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.tarearecyclerview;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,8 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ContactoAdapter.OnItemClickListener{
 
+    public ArrayList<Contacto> contactoArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        ArrayList<Contacto> contactoArrayList = new ArrayList<>(Arrays.asList(new Contacto[]{
+        contactoArrayList = new ArrayList<>(Arrays.asList(new Contacto[]{
                 new Contacto("Lucia", R.drawable.perfil1,"Garcia Perez", "lgarcia@example.com", "600123456"),
                 new Contacto("Carlos", R.drawable.perfil2,"Martinez Rodriguez", "cmartinez@example.com", "600345678"),
                 new Contacto("Ana", R.drawable.perfil3,"Lopez Gomez", "alopez@example.com", "600234567"),
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         }));
 
         //crear adaptador
-        ContactoAdapter adapter = new ContactoAdapter(contactoArrayList);
+        ContactoAdapter adapter = new ContactoAdapter(contactoArrayList, this);
         //instanciar recyclerView
         RecyclerView rvContactos = findViewById(R.id.rv_contacto);
 
@@ -51,5 +54,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Asignar el adaptador al RecyclerView
         rvContactos.setAdapter(adapter);
+
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Contacto contacto = contactoArrayList.get(position);
+        Toast.makeText(this, "Nombre: " + contacto.getNombre() + " " + contacto.getApellidos() + "\n Telefono: " + contacto.getTelefono() + " Email: " + contacto.getEmail(), Toast.LENGTH_SHORT).show();
     }
 }
